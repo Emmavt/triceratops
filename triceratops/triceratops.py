@@ -668,10 +668,12 @@ class target:
         # the time is defined relative to the transit midpoint
         assert sum(time == 0.) >= 0, "Check that time is defined relative to the transit midpoint"
         # Phase fold the light curve
+        flux_err = np.full(flux_0.shape, flux_err_0)
         lc = lightkurve.LightCurve(time, flux_0, flux_err)
         lc = lc.flatten()
 		lc = lc.fold(period=P_orb, epoch_time=0)
 	    lc.time = lc.time.value
+	    time, flux_0, flux_err_0 = lc.time.value, lc.flux.value, lc.flux_err.value
         # construct a new dataframe that gives the values of lnL, best
         # fit parameters, lnprior, and relative probability of
         # each scenario considered
